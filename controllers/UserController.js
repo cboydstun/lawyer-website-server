@@ -9,6 +9,7 @@ router.post("/signup", async (req, res) => {
     const newUser = new User({
       username: req.body.user,
       email: req.body.email,
+      PhoneNumber: req.body.PhoneNumber,
       password: bcrypt.hashSync(req.body.pass, 12),
       isAdmin: false,
     });
@@ -23,6 +24,22 @@ router.post("/signup", async (req, res) => {
       Msg: "Success, User Created!",
       Token: token,
     });
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
+
+router.get("/all", validateSession, async (req, res) => {
+  try {
+    if (req.user.isAdmin === "true") {
+      const allUsers = await User.find();
+      res.status(200).json({
+        Results: allUsers,
+      });
+    } else {
+      res.status(401).json("Not Allowed!");
+    }
   } catch (err) {
     console.log(err);
     res.send(err);

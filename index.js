@@ -17,6 +17,10 @@ mongoose.connect(process.env.DBCONNECTION, {
   useNewURLParser: true,
   useUnifiedTopology: true,
 });
+const db = mongoose.connection;
+db.once("open", () => {
+  console.log("We're connected!");
+});
 app.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });

@@ -9,9 +9,9 @@ router.post("/signup", async (req, res) => {
     const newUser = new User({
       username: req.body.user,
       email: req.body.email,
-      PhoneNumber: req.body.PhoneNumber,
+      phoneNumber: req.body.phoneNumber,
       password: bcrypt.hashSync(req.body.pass, 12),
-      isAdmin: false,
+      isAdmin: true,
     });
 
     await newUser.save();
@@ -48,12 +48,15 @@ router.get("/all", validateSession, async (req, res) => {
 
 router.post("/signin", async (req, res) => {
   try {
-    let { username, email, pass, isAdmin } = req.body;
+    let { email, pass } = req.body;
 
     const user = await User.find({ email: email });
 
     if (user.length === 0) {
       throw new Error("Incorrect email or password");
+    }
+    if (PhoneNumber.length >= 10) {
+      throw new Error("Invalid Phone Number");
     }
 
     let passwordMatch = await bcrypt.compare(pass, user[0].password);

@@ -55,9 +55,6 @@ router.post("/signin", async (req, res) => {
     if (user.length === 0) {
       throw new Error("Incorrect email or password");
     }
-    if (PhoneNumber.length >= 10) {
-      throw new Error("Invalid Phone Number");
-    }
 
     let passwordMatch = await bcrypt.compare(pass, user[0].password);
 
